@@ -7,26 +7,30 @@ import { TicketModule } from './ticket/ticket.module';
 import { OrderModule } from './order/order.module';
 import { EventModule } from './events/event.module';
 import { PaymentModule } from './payment/payment.module';
+import { User } from './user/entities/user.entity';
+import { Ticket } from './ticket/entities/ticket.entity';
+import { Order } from './order/entities/order.entity';
+import { Payment } from './payment/entities/payment.entity';
+import { Event } from './events/entities/event.entity';
 
-
+console.log(process.env)
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: '.env',
       isGlobal: true,
     }),
     SequelizeModule.forRoot({
-      dialect: process.env.DIALECT as any,
-      host: process.env.HOST,
-      port: parseInt(process.env.PORT_DB, 10),
-      username: 'postgres',
-      password: process.env.PASSWORD,
-      database: process.env.DATABASE,
-      autoLoadModels: process.env.AUTO_LOAD_MODELS === 'true',
-      synchronize: process.env.SYNCHRONIZE === 'true',
-      logging:false
+      dialect: 'postgres',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      models: [User, Event, Ticket, Order, Payment],
+      autoLoadModels: true,
+      synchronize: true,
     }),
-    SequelizeModule.forFeature([]),
+    SequelizeModule.forFeature([User, Event, Ticket, Order, Payment]),
     AuthModule,
     UserModule,
     TicketModule,
