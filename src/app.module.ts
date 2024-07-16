@@ -13,7 +13,9 @@ import { Order } from './order/entities/order.entity';
 import { Payment } from './payment/entities/payment.entity';
 import { Event } from './events/entities/event.entity';
 
-console.log(process.env)
+console.log(process.env.HOST)
+
+
 @Module({
   imports: [
     ConfigModule.forRoot({
