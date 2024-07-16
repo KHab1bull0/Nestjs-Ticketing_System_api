@@ -18,20 +18,21 @@ import { Event } from './event/entities/event.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
+      envFilePath: '.env',
+      isGlobal: true
     }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      models: [User, Event, Ticket, Order, Payment],
       autoLoadModels: true,
       synchronize: true,
+      password: process.env.DB_PASSWORD,
+      username: process.env.DB_USERNAME,
+      database: process.env.DB_NAME,
+      logging:false
     }),
-    SequelizeModule.forFeature([User, Event, Ticket, Order, Payment]),
+    SequelizeModule.forFeature([User, Ticket, Event, Payment, Order]),
     AuthModule,
     UserModule,
     TicketModule,
@@ -42,4 +43,6 @@ import { Event } from './event/entities/event.entity';
   controllers: [],
   providers: [],
 })
+
+
 export class AppModule { }

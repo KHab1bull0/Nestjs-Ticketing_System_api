@@ -4,8 +4,6 @@ import { CreateAuthDto } from './dto/user.register.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 
 
-console.log(process.env.PORT)
-
 
 @Controller('auth')
 export class AuthController {
