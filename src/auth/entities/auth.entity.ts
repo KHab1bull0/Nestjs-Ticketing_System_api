@@ -1,6 +1,6 @@
 import { Column, DataType, Model, Table } from 'sequelize-typescript';
 
-@Table({ tableName: 'users' })
+@Table({ tableName: 'users', timestamps: true })
 export class User extends Model {
   @Column({
     primaryKey: true,

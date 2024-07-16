@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateAuthDto } from './dto/update-auth.dto';
-import { CreateUserDto } from './dto/auth.register.dto';
+import { UserRegisterDto } from './dto/auth.register.dto';
 import { User } from './entities/auth.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { v4 as uuid } from 'uuid';
@@ -17,7 +17,7 @@ export class AuthService {
     private readonly mailerService: MailerService,
   ) { }
 
-  async register(createAuthDto: CreateUserDto) {
+  async register(createAuthDto: UserRegisterDto) {
     const { email, username, password } = createAuthDto;
 
     const byEmail = await this.userModel.findOne({
@@ -54,11 +54,32 @@ export class AuthService {
     return user;
   }
 
-  update(id: string, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
+  async update(id: string, updateAuthDto: UpdateAuthDto) {
+
+    const { email, username, password } = updateAuthDto;
+
+    const byEmail = await this.userModel.findOne({
+      where: { email: email }
+    });
+
+    const byUsername = await this.userModel.findOne({
+      where: { username: username }
+    });
+
+    if (byEmail || byUsername) {
+      throw new BadRequestException('User already exists');
+    }
+
+    const user = await this.userModel.findByPk(id);
+    if (!user) {
+      throw new NotFoundException("User not found")
+    }
+
+    const [, [updatedUser]] = await this.userModel.update({ ...updateAuthDto }, { where: { id }, returning: true });
+    return updatedUser;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
+remove(id: number) {
+  return `This action removes a #${id} auth`;
+}
 }
