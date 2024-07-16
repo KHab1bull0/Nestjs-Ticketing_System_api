@@ -1,11 +1,35 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/user.register.dto';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { CreateUserDto } from './dto/auth.register.dto';
+import { User } from './entities/auth.entity';
+import { InjectModel } from '@nestjs/sequelize';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    @InjectModel(User)
+    private readonly userModel: typeof User
+  ) { }
+
+  async register(createAuthDto: CreateUserDto) {
+    const { email, username, password } = createAuthDto;
+
+    const existingUser = await this.userModel.findOne({
+      where: { email: email }
+    });
+
+    if (existingUser) {
+      throw new BadRequestException('User already exists');
+    }
+
+
+    const id: string = uuid();
+
+    const user = new this.userModel({ id, ...createAuthDto });
+    user.save();
+
+    return { message: 'User created', uuid: id, otpSend: true }
   }
 
   findAll() {

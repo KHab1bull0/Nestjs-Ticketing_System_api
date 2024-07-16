@@ -1,17 +1,19 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UsePipes } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/user.register.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { CreateUserDto } from './dto/auth.register.dto';
 
 
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @UsePipes(ValidationPipe)
+  async create(@Body() createAuthDto: CreateUserDto) {
+
+    return await this.authService.register(createAuthDto);
   }
 
   @Get()
