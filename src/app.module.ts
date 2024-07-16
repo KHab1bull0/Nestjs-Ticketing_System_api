@@ -5,15 +5,14 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { TicketModule } from './ticket/ticket.module';
 import { OrderModule } from './order/order.module';
-import { EventModule } from './events/event.module';
+import { EventModule } from './event/event.module';
 import { PaymentModule } from './payment/payment.module';
 import { User } from './user/entities/user.entity';
 import { Ticket } from './ticket/entities/ticket.entity';
 import { Order } from './order/entities/order.entity';
 import { Payment } from './payment/entities/payment.entity';
-import { Event } from './events/entities/event.entity';
+import { Event } from './event/entities/event.entity';
 
-console.log(process.env.HOST)
 
 
 @Module({
