@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { UserRegisterDto } from './dto/auth.register.dto';
 import { User } from './entities/auth.entity';
@@ -9,6 +9,8 @@ import { MailerService } from '../mailer/mailer.service';
 import { Otp } from './entities/otp.entity';
 import { OtpDto } from './dto/otp.dto';
 import { LoginDto } from './dto/Login.dto';
+import { JwtService } from '@nestjs/jwt';
+import { Token } from './entities/token.entity';
 
 
 @Injectable()
@@ -18,7 +20,11 @@ export class AuthService {
     private readonly otpModel: typeof Otp,
     @InjectModel(User)
     private readonly userModel: typeof User,
+    @InjectModel(Token)
+    private readonly tokenModel: typeof Token,
+
     private readonly mailerService: MailerService,
+    private readonly jwtService: JwtService
   ) { }
 
   async register(createAuthDto: UserRegisterDto) {
@@ -70,12 +76,21 @@ export class AuthService {
   async loginUser(loginDto: LoginDto) {
     const { email, password } = loginDto
     const user = await this.userModel.findOne({ where: { email: email } });
+
     if(!user){
       throw new NotFoundException("User not found");
     }
+    if (user?.password !== password) {
+      throw new UnauthorizedException();
+    }
 
+    const accessToken = this.jwtService.sign({email}, { secret: process.env.ACCESSKEY, expiresIn: '5m' });
+    const refreshToken = this.jwtService.sign({email}, { secret: process.env.REFRESHKEY, expiresIn: '7d' });
+
+    const refresh = new this.tokenModel({email: email, rToken: refreshToken});
+    refresh.save()
     
-    return ''
+    return {accessToken, refreshToken}
   }
   async findAll() {
     return await this.userModel.findAll();

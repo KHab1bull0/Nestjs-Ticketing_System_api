@@ -1,5 +1,5 @@
 import { Optional } from '@nestjs/common';
-import { IsEmail, IsEnum, IsString, Length } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, Length } from 'class-validator';
 
 export enum UserRole {
   USER = 'user',
@@ -26,9 +26,11 @@ export class UserRegisterDto {
   password: string;
 
   @IsEnum(UserRole)
+  @IsOptional()
   role: UserRole;
 
   @IsEnum(UserStatus)
+  @IsOptional()
   status: UserStatus;
 
   createdAt: Date;

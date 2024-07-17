@@ -6,13 +6,14 @@ import { TicketModule } from './ticket/ticket.module';
 import { OrderModule } from './order/order.module';
 import { EventModule } from './event/event.module';
 import { PaymentModule } from './payment/payment.module';
+import { MailerModule } from './mailer/mailer.module';
 import { User } from './auth/entities/auth.entity';
 import { Ticket } from './ticket/entities/ticket.entity';
 import { Order } from './order/entities/order.entity';
 import { Payment } from './payment/entities/payment.entity';
 import { Event } from './event/entities/event.entity';
-import { MailerModule } from './mailer/mailer.module';
 import { Otp } from './auth/entities/otp.entity';
+import { Token } from './auth/entities/token.entity';
 
 
 @Module({
@@ -21,18 +22,19 @@ import { Otp } from './auth/entities/otp.entity';
     ConfigModule.forRoot({
       isGlobal: true
     }),
+
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
-      autoLoadModels: true,
-      synchronize: true,
       password: process.env.DB_PASSWORD,
       username: process.env.DB_USERNAME,
       database: process.env.DB_NAME,
+      synchronize: true,
+      autoLoadModels: true,
       logging:false
     }),
-    SequelizeModule.forFeature([User, Ticket, Event, Payment, Order, Otp]),
+    // SequelizeModule.forFeature([User, Ticket, Order, Payment, Token, Event, Otp]),
     TicketModule,
     OrderModule,
     EventModule,
