@@ -36,10 +36,6 @@ export class EventService {
   }
 
   async update(id: string, updateEventDto: UpdateEventDto) {
-    const event = await this.eventModel.findOne({ where: { id: id } })
-    if (event) {
-      throw new BadRequestException("Event already exists");
-    }
     const [numberOfAffectedRows, [updatedEvent]] = await this.eventModel.update(
       { ...updateEventDto },
       { where: { id: id }, returning: true }
@@ -55,12 +51,11 @@ export class EventService {
   async remove(id: string) {
     const event = await this.eventModel.destroy({ where: { id: id } });
     if (event == 0) {
-      return { message: `Event don't deleted or not exists` }
+      throw new NotFoundException("Event not found")
     }
 
     if (event == 1) {
       return { message: "Event deleted" }
     }
-    return event
   }
 }

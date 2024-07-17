@@ -22,7 +22,7 @@ export class UserRegisterDto {
   username: string;
 
   @IsString()
-  @Length(8, 100)
+  @Length(6, 15)
   password: string;
 
   @IsEnum(UserRole)

@@ -12,6 +12,7 @@ import { Order } from './order/entities/order.entity';
 import { Payment } from './payment/entities/payment.entity';
 import { Event } from './event/entities/event.entity';
 import { MailerModule } from './mailer/mailer.module';
+import { Otp } from './auth/entities/otp.entity';
 
 
 @Module({
@@ -31,7 +32,7 @@ import { MailerModule } from './mailer/mailer.module';
       database: process.env.DB_NAME,
       logging:false
     }),
-    SequelizeModule.forFeature([User, Ticket, Event, Payment, Order]),
+    SequelizeModule.forFeature([User, Ticket, Event, Payment, Order, Otp]),
     TicketModule,
     OrderModule,
     EventModule,
