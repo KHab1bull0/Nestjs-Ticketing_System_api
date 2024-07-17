@@ -11,10 +11,12 @@ import { Ticket } from './ticket/entities/ticket.entity';
 import { Order } from './order/entities/order.entity';
 import { Payment } from './payment/entities/payment.entity';
 import { Event } from './event/entities/event.entity';
+import { MailerModule } from './mailer/mailer.module';
 
 
 @Module({
   imports: [
+    MailerModule,
     ConfigModule.forRoot({
       isGlobal: true
     }),

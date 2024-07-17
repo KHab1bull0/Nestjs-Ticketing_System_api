@@ -10,7 +10,6 @@ export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
   @Post()
-  @UsePipes(ValidationPipe)
   async create(@Body() createAuthDto: UserRegisterDto) {
 
     return await this.authService.register(createAuthDto);

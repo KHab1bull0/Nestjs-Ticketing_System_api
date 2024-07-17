@@ -1,5 +1,5 @@
 import { Column, DataType, Model, Table, ForeignKey } from 'sequelize-typescript';
-import { Order } from 'src/order/entities/order.entity';
+import { Order } from '../../order/entities/order.entity';
 
 @Table({ tableName: 'payments' })
 export class Payment extends Model<Payment> {

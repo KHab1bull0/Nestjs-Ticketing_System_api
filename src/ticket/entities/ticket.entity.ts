@@ -1,5 +1,5 @@
 import { Column, DataType, Model, Table, ForeignKey } from 'sequelize-typescript';
-import { Event } from 'src/event/entities/event.entity';
+import { Event } from '../../event/entities/event.entity';
 
 @Table({ tableName: 'tickets' })
 export class Ticket extends Model<Ticket> {

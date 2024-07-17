@@ -1,5 +1,5 @@
 import { Column, DataType, Model, Table, ForeignKey } from 'sequelize-typescript';
-import { User } from 'src/auth/entities/auth.entity';
+import { User } from '../../auth/entities/auth.entity';
 
 @Table({ tableName: 'orders' })
 export class Order extends Model<Order> {

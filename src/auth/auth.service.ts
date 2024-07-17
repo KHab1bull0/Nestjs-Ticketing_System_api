@@ -4,9 +4,8 @@ import { UserRegisterDto } from './dto/auth.register.dto';
 import { User } from './entities/auth.entity';
 import { InjectModel } from '@nestjs/sequelize';
 import { v4 as uuid } from 'uuid';
-import { MailerService } from 'src/mailer/mailer.service';
 import * as otpGen from 'otp-generator';
-import { NotFoundError } from 'rxjs';
+import { MailerService } from '../mailer/mailer.service';
 
 
 @Injectable()
@@ -79,7 +78,7 @@ export class AuthService {
     return updatedUser;
   }
 
-remove(id: number) {
-  return `This action removes a #${id} auth`;
-}
+  remove(id: number) {
+    return `This action removes a #${id} auth`;
+  }
 }

@@ -20,8 +20,6 @@ export class EventService {
     if (event) {
       throw new BadRequestException("Event already exists");
     }
-    const dates = new Date(date)
-
 
     const id: string = uuid();
     const newEvent = new this.eventModel({ id, ...createEventDto })
@@ -38,9 +36,13 @@ export class EventService {
   }
 
   async update(id: string, updateEventDto: UpdateEventDto) {
+    const event = await this.eventModel.findOne({ where: { id: id } })
+    if (event) {
+      throw new BadRequestException("Event already exists");
+    }
     const [numberOfAffectedRows, [updatedEvent]] = await this.eventModel.update(
       { ...updateEventDto },
-      { where: { id }, returning: true }
+      { where: { id: id }, returning: true }
     );
 
     if (numberOfAffectedRows === 0) {
