@@ -2,10 +2,15 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TicketService } from './ticket.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
+import { InjectModel } from '@nestjs/sequelize';
+import { Ticket } from './entities/ticket.entity';
 
 @Controller('ticket')
 export class TicketController {
-  constructor(private readonly ticketService: TicketService) {}
+  constructor(
+    @InjectModel(Ticket)
+    private readonly ticketService: TicketService
+  ) { }
 
   @Post()
   create(@Body() createTicketDto: CreateTicketDto) {

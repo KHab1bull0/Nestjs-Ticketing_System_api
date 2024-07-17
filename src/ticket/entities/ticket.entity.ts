@@ -4,8 +4,6 @@ import { Event } from 'src/event/entities/event.entity';
 @Table({ tableName: 'tickets' })
 export class Ticket extends Model<Ticket> {
   @Column({
-    type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
     primaryKey: true,
   })
   id: string;
@@ -20,7 +18,7 @@ export class Ticket extends Model<Ticket> {
   @Column({ type: DataType.DECIMAL })
   price: number;
 
-  @Column({ type: DataType.STRING })
+  @Column({ type: DataType.ENUM('USD', 'EUR', 'UZS') })
   currency: string;
 
   @Column({ type: DataType.STRING })

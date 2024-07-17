@@ -29,12 +29,6 @@ export class Event extends Model<Event> {
 
   @Column({ type: DataType.INTEGER })
   availableTickets: number;
-
-  @Column({ type: DataType.DATE })
-  createdAt?: string;
-
-  @Column({ type: DataType.DATE })
-  updatedAt?: any;
 }
 
 
