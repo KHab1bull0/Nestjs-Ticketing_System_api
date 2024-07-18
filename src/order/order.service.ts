@@ -35,7 +35,7 @@ export class OrderService {
 
       if(!ticket){
         throw new NotFoundException(`Ticket by id ${tickets[i]} not found`)
-      }
+      };
     }
 
     const id = uuid()
