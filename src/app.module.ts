@@ -16,6 +16,7 @@ import { Otp } from './auth/entities/otp.entity';
 import { Token } from './auth/entities/token.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './middleware/role.guard';
+import { AuthGuard } from './middleware/auth.guard';
 
 
 @Module({
@@ -44,9 +45,15 @@ import { RolesGuard } from './middleware/role.guard';
     AuthModule,
   ],
   controllers: [],
-  providers: [{
-    provide: APP_GUARD,
-    useClass: RolesGuard,
-  },],
+  providers: [
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthGuard,
+    // },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RolesGuard,
+    // },
+  ],
 })
 export class AppModule { }

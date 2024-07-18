@@ -81,12 +81,13 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException("User not found");
     }
+
     if (user?.password !== password) {
       throw new UnauthorizedException();
     }
 
-    const accessToken = this.jwtService.sign({ email }, { secret: process.env.ACCESSKEY, expiresIn: '15m' });
-    const refreshToken = this.jwtService.sign({ email }, { secret: process.env.REFRESHKEY, expiresIn: '7d' });
+    const accessToken = this.jwtService.sign({ email, role: user.role }, { secret: process.env.ACCESSKEY, expiresIn: '15m' });
+    const refreshToken = this.jwtService.sign({ email, role: user.role }, { secret: process.env.REFRESHKEY, expiresIn: '7d' });
     const info = await this.userModel.update({ status: "active" }, { where: { email: email }, returning: true });
 
     const refresh = new this.tokenModel({ email: email, rToken: refreshToken });
@@ -97,8 +98,8 @@ export class AuthService {
 
   async refreshToken(token: string) {
     const user = this.jwtService.verify(token, { secret: process.env.REFRESHKEY })
-    const newAccess = this.jwtService.sign({ email: user.email }, { secret: process.env.ACCESSKEY, expiresIn: '15m' })
-    const newRefresh = this.jwtService.sign({ email: user.email }, { secret: process.env.REFRESHKEY, expiresIn: '7d' });
+    const newAccess = this.jwtService.sign({ email: user.email, role: user.role }, { secret: process.env.ACCESSKEY, expiresIn: '15m' })
+    const newRefresh = this.jwtService.sign({ email: user.email, role: user.role }, { secret: process.env.REFRESHKEY, expiresIn: '7d' });
 
     const obj = {
       email: user.email,
@@ -127,7 +128,7 @@ export class AuthService {
 
     return { message: 'LogOut successfully' }
   }
-
+  
   async findAll() {
     return await this.userModel.findAll();
   }

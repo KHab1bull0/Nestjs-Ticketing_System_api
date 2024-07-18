@@ -5,12 +5,14 @@ import { OrderService } from 'src/order/order.service';
 import { Payment } from './entities/payment.entity';
 import { v4 as uuid } from 'uuid';
 import { AuthService } from 'src/auth/auth.service';
+import { InjectModel } from '@nestjs/sequelize';
 
 
 @Injectable()
 export class PaymentService {
 
   constructor(
+    @InjectModel(Payment)
     private readonly paymentModel: typeof Payment,
     private readonly orderService: OrderService,
     private readonly userService: AuthService

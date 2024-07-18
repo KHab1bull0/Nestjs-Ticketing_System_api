@@ -6,6 +6,7 @@ import { OtpDto } from './dto/otp.dto';
 import { LoginDto } from './dto/Login.dto';
 import { AuthGuard } from 'src/middleware/auth.guard';
 import { Role, Roles } from 'src/middleware/role.decorator';
+import { RolesGuard } from 'src/middleware/role.guard';
 
 
 
@@ -17,7 +18,6 @@ export class AuthController {
 
   @Post()
   async create(@Body() createAuthDto: UserRegisterDto) {
-
     return await this.authService.register(createAuthDto);
   }
 
@@ -32,8 +32,8 @@ export class AuthController {
     return await this.authService.loginUser(loginDto)
   }
 
-  @Get('/getMe')
   @UseGuards(AuthGuard)
+  @Get('/getMe')
   async getMe(@Request() req) {
     return this.authService.getMe(req.user);
   }
@@ -43,28 +43,36 @@ export class AuthController {
     return this.authService.refreshToken(token.rToken)
   }
 
-  @Post('/logout')
   @UseGuards(AuthGuard)
+  @Post('/logout')
   async logOut(@Request() req) {
 
     return this.authService.logOut(req.user);
   }
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
   @Get()
   async findAll() {
     return await this.authService.findAll();
   }
 
 
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.authService.findOne(id);
   }
 
+  @Roles(Role.User, Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
     return await this.authService.update(id, updateAuthDto);
   }
 
+  @Roles(Role.User, Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.authService.remove(id);
