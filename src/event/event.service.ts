@@ -32,7 +32,12 @@ export class EventService {
   }
 
   findOne(id: string) {
-    return this.eventModel.findOne({ where: { id: id } });
+    const event = this.eventModel.findOne({ where: { id: id } });
+    if(!event){
+      throw new NotFoundException("Event not found")
+    }
+
+    return event
   }
 
   async update(id: string, updateEventDto: UpdateEventDto) {

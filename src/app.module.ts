@@ -14,6 +14,8 @@ import { Payment } from './payment/entities/payment.entity';
 import { Event } from './event/entities/event.entity';
 import { Otp } from './auth/entities/otp.entity';
 import { Token } from './auth/entities/token.entity';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './middleware/role.guard';
 
 
 @Module({
@@ -32,7 +34,7 @@ import { Token } from './auth/entities/token.entity';
       database: process.env.DB_NAME,
       synchronize: true,
       autoLoadModels: true,
-      logging:false
+      logging: false
     }),
     // SequelizeModule.forFeature([User, Ticket, Order, Payment, Token, Event, Otp]),
     TicketModule,
@@ -42,6 +44,9 @@ import { Token } from './auth/entities/token.entity';
     AuthModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [{
+    provide: APP_GUARD,
+    useClass: RolesGuard,
+  },],
 })
 export class AppModule { }

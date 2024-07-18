@@ -1,14 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, UsePipes } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { UserRegisterDto } from './dto/auth.register.dto';
 import { OtpDto } from './dto/otp.dto';
 import { LoginDto } from './dto/Login.dto';
+import { AuthGuard } from 'src/middleware/auth.guard';
+import { Role, Roles } from 'src/middleware/role.decorator';
 
 
 
 @Controller('user')
 export class AuthController {
+
+  roles: Role[];
   constructor(private readonly authService: AuthService) { }
 
   @Post()
@@ -22,12 +26,31 @@ export class AuthController {
     return await this.authService.verifyOtp(otpDto)
   }
 
+
   @Post('/login')
   async login(@Body() loginDto: LoginDto) {
     return await this.authService.loginUser(loginDto)
   }
 
+  @Get('/getMe')
+  @UseGuards(AuthGuard)
+  async getMe(@Request() req) {
+    return this.authService.getMe(req.user);
+  }
+
+  @Post("/refreshToken")
+  async refresh(@Body() token: { rToken: string }) {
+    return this.authService.refreshToken(token.rToken)
+  }
+
+  @Post('/logout')
+  @UseGuards(AuthGuard)
+  async logOut(@Request() req) {
+
+    return this.authService.logOut(req.user);
+  }
   @Get()
+  @Roles(Role.Admin)
   async findAll() {
     return await this.authService.findAll();
   }

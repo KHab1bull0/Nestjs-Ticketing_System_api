@@ -11,6 +11,7 @@ import { OtpDto } from './dto/otp.dto';
 import { LoginDto } from './dto/Login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Token } from './entities/token.entity';
+import { Request } from 'express';
 
 
 @Injectable()
@@ -77,21 +78,56 @@ export class AuthService {
     const { email, password } = loginDto
     const user = await this.userModel.findOne({ where: { email: email } });
 
-    if(!user){
+    if (!user) {
       throw new NotFoundException("User not found");
     }
     if (user?.password !== password) {
       throw new UnauthorizedException();
     }
 
-    const accessToken = this.jwtService.sign({email}, { secret: process.env.ACCESSKEY, expiresIn: '5m' });
-    const refreshToken = this.jwtService.sign({email}, { secret: process.env.REFRESHKEY, expiresIn: '7d' });
+    const accessToken = this.jwtService.sign({ email }, { secret: process.env.ACCESSKEY, expiresIn: '15m' });
+    const refreshToken = this.jwtService.sign({ email }, { secret: process.env.REFRESHKEY, expiresIn: '7d' });
+    const info = await this.userModel.update({ status: "active" }, { where: { email: email }, returning: true });
 
-    const refresh = new this.tokenModel({email: email, rToken: refreshToken});
+    const refresh = new this.tokenModel({ email: email, rToken: refreshToken });
     refresh.save()
-    
-    return {accessToken, refreshToken}
+
+    return { accessToken, refreshToken }
   }
+
+  async refreshToken(token: string) {
+    const user = this.jwtService.verify(token, { secret: process.env.REFRESHKEY })
+    const newAccess = this.jwtService.sign({ email: user.email }, { secret: process.env.ACCESSKEY, expiresIn: '15m' })
+    const newRefresh = this.jwtService.sign({ email: user.email }, { secret: process.env.REFRESHKEY, expiresIn: '7d' });
+
+    const obj = {
+      email: user.email,
+      rToken: newRefresh
+    }
+    const [, [updatedUser]] = await this.tokenModel.update({ ...obj }, { where: { email: user.email }, returning: true });
+
+    return { newAccess, newRefresh }
+  }
+
+
+  async getMe(user: any) {
+    const { email } = user
+
+    const userInfo = await this.userModel.findOne({ where: { email: email } })
+
+    if (!userInfo) {
+      throw new NotFoundException("User not found");
+    }
+    return userInfo
+  }
+
+  async logOut(user: any) {
+    const n = await this.userModel.update({ status: 'inactive' }, { where: { email: user.email } })
+    const delInfo = await this.tokenModel.destroy({ where: { email: user.email } });
+
+    return { message: 'LogOut successfully' }
+  }
+
   async findAll() {
     return await this.userModel.findAll();
   }
@@ -116,8 +152,8 @@ export class AuthService {
       where: { username: username }
     });
 
-    if (byEmail || byUsername) {
-      throw new BadRequestException('User already exists');
+    if (!byEmail || !byUsername) {
+      throw new NotFoundException('User already exists');
     }
 
     const user = await this.userModel.findByPk(id);

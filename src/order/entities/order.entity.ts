@@ -4,8 +4,6 @@ import { User } from '../../auth/entities/auth.entity';
 @Table({ tableName: 'orders' })
 export class Order extends Model<Order> {
   @Column({
-    type: DataType.UUID,
-    defaultValue: DataType.UUIDV4,
     primaryKey: true,
   })
   id: string;
