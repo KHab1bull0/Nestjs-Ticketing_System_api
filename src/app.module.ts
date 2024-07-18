@@ -20,7 +20,6 @@ import { RolesGuard } from './middleware/role.guard';
 
 @Module({
   imports: [
-    MailerModule,
     ConfigModule.forRoot({
       isGlobal: true
     }),
@@ -37,6 +36,7 @@ import { RolesGuard } from './middleware/role.guard';
       logging: false
     }),
     // SequelizeModule.forFeature([User, Ticket, Order, Payment, Token, Event, Otp]),
+    MailerModule,
     TicketModule,
     OrderModule,
     EventModule,

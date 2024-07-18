@@ -50,7 +50,6 @@ export class AuthController {
     return this.authService.logOut(req.user);
   }
   @Get()
-  @Roles(Role.Admin)
   async findAll() {
     return await this.authService.findAll();
   }

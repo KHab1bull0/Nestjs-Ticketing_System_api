@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { Otp } from './entities/otp.entity';
 import { User } from './entities/auth.entity';
 import { Token } from './entities/token.entity';
+import { MailerService } from 'src/mailer/mailer.service';
 
 @Module({
   imports: [

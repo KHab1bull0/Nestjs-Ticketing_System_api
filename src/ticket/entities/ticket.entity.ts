@@ -15,14 +15,14 @@ export class Ticket extends Model<Ticket> {
   @Column({ type: DataType.ENUM('standard', 'vip', 'student', 'senior') })
   type: string;
 
-  @Column({ type: DataType.DECIMAL })
+  @Column({ type: DataType.NUMBER })
   price: number;
 
   @Column({ type: DataType.ENUM('USD', 'EUR', 'UZS') })
   currency: string;
 
-  @Column({ type: DataType.STRING })
-  seatNumber: string;
+  @Column({ type: DataType.NUMBER })
+  seatNumber: number;
 
   @Column({ type: DataType.ENUM('available', 'booked', 'sold') })
   status: string;

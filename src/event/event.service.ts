@@ -46,10 +46,6 @@ export class EventService {
       { where: { id: id }, returning: true }
     );
 
-    if (numberOfAffectedRows === 0) {
-      throw new NotFoundException(`Event with id ${id} not found`);
-    }
-
     return updatedEvent;
   }
 

@@ -1,6 +1,10 @@
 import { Column, DataType, Model, Table, ForeignKey } from 'sequelize-typescript';
 import { User } from '../../auth/entities/auth.entity';
 
+
+
+
+
 @Table({ tableName: 'orders' })
 export class Order extends Model<Order> {
   @Column({
@@ -18,7 +22,10 @@ export class Order extends Model<Order> {
   @Column({ type: DataType.DECIMAL })
   totalAmount: number;
 
-  @Column({ type: DataType.STRING })
+  @Column({
+    type: DataType.ENUM('USD', 'EUR', 'UZS') ,
+    allowNull: false
+  })
   currency: string;
 
   @Column({ type: DataType.ENUM('pending', 'completed', 'cancelled') })

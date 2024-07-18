@@ -1,4 +1,4 @@
-import { IsEnum, IsString, IsUUID } from "class-validator";
+import { IsEnum, IsNumber, IsString, IsUUID, isEnum } from "class-validator";
 
 
 
@@ -28,17 +28,22 @@ export class CreateTicketDto {
     eventId: string;
     
     @IsString()
+    @IsEnum(Type)
     type: string;
+
+    @IsNumber()
     price: number;
 
     @IsString()
     @IsEnum(Currency)
     currency: string;
 
-    @IsString()
-    seatNumber: string;
+    @IsNumber()
+    seatNumber: number;
 
     @IsString()
     @IsEnum(Status)
     status: string
 }
+
+

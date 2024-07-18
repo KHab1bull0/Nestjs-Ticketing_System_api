@@ -1,19 +1,22 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsString, IsUUID } from "class-validator";
-
+import { ArrayNotEmpty, IsArray, IsEnum, IsNotEmpty, IsNumber, IsString, IsUUID, isString } from "class-validator";
 
 
 export enum Status {
-    pending = 'active',
-    completed = 'inactive',
+    pending = 'pending',
+    completed = 'completed',
     cancelled = 'cancelled'
 }
 
 export class CreateOrderDto {
-    @IsNumber()
+    @IsString()
     @IsUUID()
     @IsNotEmpty()
-    userid: string
+    userId: string
 
+    @IsArray()
+    @ArrayNotEmpty()
+    @IsUUID('4', { each: true })
+    tickets: string[];
     @IsNotEmpty()
     @IsNumber()
     totalAmount: number
