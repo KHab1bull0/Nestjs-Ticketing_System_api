@@ -8,11 +8,14 @@ import { Otp } from './entities/otp.entity';
 import { User } from './entities/auth.entity';
 import { Token } from './entities/token.entity';
 import { MailerService } from 'src/mailer/mailer.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserTypeORm } from './entities/userTypeOrm..entity';
 
 @Module({
   imports: [
     MailerModule,
     SequelizeModule.forFeature([User, Otp, Token]),
+    TypeOrmModule.forFeature([UserTypeORm]),
     JwtModule.register({
       global: true
     })

@@ -12,6 +12,9 @@ import { LoginDto } from './dto/Login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { Token } from './entities/token.entity';
 import { Request } from 'express';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UserTypeORm } from './entities/userTypeOrm..entity';
+import { Repository } from 'typeorm';
 
 
 @Injectable()
@@ -24,12 +27,24 @@ export class AuthService {
     @InjectModel(Token)
     private readonly tokenModel: typeof Token,
 
+    @InjectRepository(UserTypeORm)
+    private readonly usertypeorm: Repository<UserTypeORm>,
+
     private readonly mailerService: MailerService,
     private readonly jwtService: JwtService
   ) { }
 
   async register(createAuthDto: UserRegisterDto) {
     const { email, username, password } = createAuthDto;
+
+
+
+    // TypeOrm section 
+    const typeOrmId = uuid();
+    const typeOrmUser = this.usertypeorm.save({ id: typeOrmId, ...createAuthDto })
+    return typeOrmUser;
+    // TypeOrm section 
+
 
     const byEmail = await this.userModel.findOne({
       where: { email: email }
@@ -128,7 +143,7 @@ export class AuthService {
 
     return { message: 'LogOut successfully' }
   }
-  
+
   async findAll() {
     return await this.userModel.findAll();
   }

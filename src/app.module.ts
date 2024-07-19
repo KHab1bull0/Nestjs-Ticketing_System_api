@@ -17,6 +17,8 @@ import { Token } from './auth/entities/token.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { RolesGuard } from './middleware/role.guard';
 import { AuthGuard } from './middleware/auth.guard';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserTypeORm } from './auth/entities/userTypeOrm..entity';
 
 
 @Module({
@@ -35,6 +37,16 @@ import { AuthGuard } from './middleware/auth.guard';
       synchronize: true,
       autoLoadModels: true,
       logging: false
+    }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      password: process.env.DB_PASSWORD,
+      username: process.env.DB_USERNAME,
+      database: process.env.DB_NAME,
+      synchronize: true,
+      entities: [UserTypeORm],
     }),
     // SequelizeModule.forFeature([User, Ticket, Order, Payment, Token, Event, Otp]),
     MailerModule,
