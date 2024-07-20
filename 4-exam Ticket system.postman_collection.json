@@ -1,0 +1,753 @@
+{
+	"info": {
+		"_postman_id": "f6d14fd2-f6f2-4eb1-965c-efc7348dc3ab",
+		"name": "4-exam Ticket system",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34639065"
+	},
+	"item": [
+		{
+			"name": "User and auth",
+			"item": [
+				{
+					"name": "Sign up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"habibullotoyrilmasov@gmail.com\",\n    \"username\": \"testers\",\n    \"password\": \"12345678\",\n    \"role\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user"
+							]
+						},
+						"description": "``` json\n{\n    \"email\": \"habibullotoyrilmasov@gmail.com\",\n    \"username\": \"testers\",\n    \"password\": \"12345678\"\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "Verify OTP",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"habibullotoyrilmasov@gmail.com\",\n    \"username\": \"testers\",\n    \"otp\": \"437725\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/verify",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.environment.set(\"accessToken\", jsonData.accessToken);",
+									"pm.environment.set(\"refreshToken\", jsonData.refreshToken);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"habibullotoyrilmasov@gmail.com\",\n    \"password\": \"12345678\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/auth/df1f9f5f-6bc4-4d24-a1a3-9e4b06cac839",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"df1f9f5f-6bc4-4d24-a1a3-9e4b06cac839"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch one User",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"xabibullotoyrilmasov385@gmail.com\",\n    \"username\": \"tester\",\n    \"password\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/10225989-cd4f-43f2-a93b-dc5723953baa",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"10225989-cd4f-43f2-a93b-dc5723953baa"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/auth/2fae2970-1a2e-49e4-b8f5-41630c782bf4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"2fae2970-1a2e-49e4-b8f5-41630c782bf4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"",
+									"pm.environment.set(\"accessToken\", jsonData.newAccess);",
+									"pm.environment.set(\"refreshToken\", jsonData.newRefresh);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"rToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InhhYmlidWxsb3RveXJpbG1hc292Mzg1QGdtYWlsLmNvbSIsImlhdCI6MTcyMTIzODM5OCwiZXhwIjoxNzIxODQzMTk4fQ.YkOzAaY-ruGMbUfRKWOr3zdctPeR5FAwsuuNsJBEs5M\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/user/refreshToken",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"refreshToken"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Me",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/getMe",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"getMe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Log Out",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user/logout",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Event",
+			"item": [
+				{
+					"name": "Create event",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Node coders\",\n    \"description\": \"This is a sample event description.\",\n    \"location\": \"Sample Location\",\n    \"date\": \"2023-12-31T23:59:59.000Z\",\n    \"time\": \"23:59:59\",\n    \"totalTickets\": 100,\n    \"availableTickets\": 50\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/event",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"event"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/event/a33c317b-ef63-4187-b680-f4f92294f87c",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"event",
+								"a33c317b-ef63-4187-b680-f4f92294f87c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/event",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"event"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/event/cb55b097-48af-4a54-b8ba-7a35ddd0f968",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"event",
+								"cb55b097-48af-4a54-b8ba-7a35ddd0f968"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put one",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Flutter musobaqasi\",\n    \"description\": \"This is a sample event description.\",\n    \"location\": \"Sample Location\",\n    \"date\": \"2023-12-31T23:59:59.000Z\",\n    \"time\": \"13:00:00\",\n    \"totalTickets\": 50,\n    \"availableTickets\": 50\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/event/cb55b097-48af-4a54-b8ba-7a35ddd0f968",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"event",
+								"cb55b097-48af-4a54-b8ba-7a35ddd0f968"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tickets",
+			"item": [
+				{
+					"name": "Create ticket",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"eventId\": \"a33c317b-ef63-4187-b680-f4f92294f87c\",\n    \"currency\": \"UZS\",\n    \"type\": \"vip\",\n    \"price\": 12,\n    \"status\": \"booked\",\n    \"seatNumber\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ticket",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/ticket",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/ticket/d5d3e841-82c6-485d-a8a0-f16a95c92151",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket",
+								"d5d3e841-82c6-485d-a8a0-f16a95c92151"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/ticket/ee399bca-8076-457d-8ae6-a2344aca51c7",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket",
+								"ee399bca-8076-457d-8ae6-a2344aca51c7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put one",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"eventId\": \"a33c317b-ef63-4187-b680-f4f92294f87c\",\n    \"type\": \"vip\",\n    \"price\": 12,\n    \"currency\": \"UZS\",\n    \"seatNumber\": 1,\n    \"status\": \"sold\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/ticket/ee399bca-8076-457d-8ae6-a2344aca51c7",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"ticket",
+								"ee399bca-8076-457d-8ae6-a2344aca51c7"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Create order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"d356da12-0615-45d1-b815-239f842e2ea5\",\n    \"totalAmount\": 123,\n    \"tickets\": [\"8a8f0e38-0b52-4865-a7c2-5904fa4eff21\"],\n    \"currency\": \"UZS\",\n    \"status\": \"pending\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/order",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/order",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/order/0e516087-ecd3-4f56-b656-31f232959ac6",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"order",
+								"0e516087-ecd3-4f56-b656-31f232959ac6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Put one",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\": \"c96bf96e-f21d-43d8-b01d-6ab75097851d\",\n    \"status\": \"completed\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/order/c96bf96e-f21d-43d8-b01d-6ab75097851d",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"order",
+								"c96bf96e-f21d-43d8-b01d-6ab75097851d"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete One",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/order/0e516087-ecd3-4f56-b656-31f232959ac6",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"order",
+								"0e516087-ecd3-4f56-b656-31f232959ac6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payments",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\": \"c96bf96e-f21d-43d8-b01d-6ab75097851d\",\n    \"amount\": 12,\n    \"method\": \"paymal\",\n    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/payment",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"payment"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

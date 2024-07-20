@@ -38,6 +38,7 @@ import { UserTypeORm } from './auth/entities/userTypeOrm..entity';
       autoLoadModels: true,
       logging: false
     }),
+    
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
